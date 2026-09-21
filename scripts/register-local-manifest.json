@@ -1,6 +1,6 @@
 {
   "name": "News Catcher",
-  "description": "MIP-003 news research agent (NewsCatcher API). Fixed 1 tUSDM per job on Preprod.",
+  "description": "MIP-003 news research agent (NewsCatcher API). Fixed 3 ADA per job on Preprod.",
   "apiBaseUrl": "http://localhost:3040",
   "Tags": ["news", "research", "newscatcher"],
   "Capability": { "name": "newscatcher", "version": "1" },
@@ -29,12 +29,7 @@
       "address": "addr_test1wzs4e6wc95hkwezlccjw9mdvq0r0rsgx6zk34avptga3ftgn37w4g",
       "pricing": {
         "pricingType": "Fixed",
-        "fixed": [
-          {
-            "asset": "16a55b2a349361ff88c03788f93e1e966e5d689605d044fef722ddde0014df10745553444d",
-            "amount": "1000000"
-          }
-        ]
+        "fixed": [{ "asset": "", "amount": "3000000" }]
       }
     }
   ]

@@ -1,8 +1,7 @@
 {
-  "tUSDM": {
-    "symbol": "tUSDM",
-    "decimals": 6,
-    "fullAssetId": "16a55b2a349361ff88c03788f93e1e966e5d689605d044fef722ddde0014df10745553444d",
-    "oneWholeTokenBaseUnits": "1000000"
+  "lovelace": {
+    "symbol": "ADA",
+    "manifestAsset": "",
+    "threeAdaBaseUnits": "3000000"
   }
 }
