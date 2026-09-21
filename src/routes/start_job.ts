@@ -3,6 +3,7 @@ import { logError } from '../logger.js';
 import { parseInputData } from '../parse_input.js';
 import { createJobRecord, runPipeline } from '../services/job.js';
 import {
+  buildMip003PaidStartJobBody,
   createPaymentRequest,
   isPaymentConfigured,
   parseAmountLovelace,
@@ -54,15 +55,14 @@ export async function postStartJob(req: Request, res: Response): Promise<void> {
       const amountLovelace = parseAmountLovelace(payment);
       await prismaUpdatePaymentFields(id, payment, amountLovelace);
 
-      res.status(201).json({
-        job_id: id,
-        id,
-        identifier_from_seller: id,
-        blockchain_identifier: payment.blockchainIdentifier,
-        payment_address: payment.payByAddress ?? null,
-        amount_lovelace: amountLovelace,
-        status: 'awaiting_payment',
-      });
+      res.status(201).json(
+        buildMip003PaidStartJobBody({
+          jobId: id,
+          inputHash,
+          identifierFromPurchaser: buyerId,
+          payment,
+        }),
+      );
       return;
     }
 
@@ -88,7 +88,7 @@ async function prismaUpdatePaymentFields(
     where: { id: jobId },
     data: {
       blockchainIdentifier: payment.blockchainIdentifier,
-      paymentAddress: payment.payByAddress ?? null,
+      paymentAddress: payment.SmartContractWallet?.walletAddress ?? null,
       amountLovelace: amountLovelace != null ? String(amountLovelace) : null,
     },
   });

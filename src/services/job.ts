@@ -1,4 +1,4 @@
-import { mipHashInputHex, mipHashOutputHex } from '../lib/hash.js';
+import { mipHashInputHex, mipHashResultHex } from '../lib/hash.js';
 import { logError } from '../logger.js';
 import { parseInputData } from '../parse_input.js';
 import { prisma } from '../db.js';
@@ -73,7 +73,7 @@ export function runPipeline(jobId: string): void {
       }
 
       const output = await searchNews(payload);
-      const outputHash = mipHashOutputHex(job.buyerId, output);
+      const outputHash = mipHashResultHex(job.buyerId, output.summary_markdown);
       if (job.blockchainIdentifier && isPaymentConfigured()) {
         try {
           await submitResultHash(job.blockchainIdentifier, outputHash);
