@@ -1,3 +1,3 @@
 # newscatcher
 
-See [README.md](./README.md). Skills: `masumi`, `sokosumi` in repo `.agents/skills/`.
+See [README.md](./README.md). Masumi/Sokosumi skills live in the parent `nmkr` workspace (`.agents/skills/`).
