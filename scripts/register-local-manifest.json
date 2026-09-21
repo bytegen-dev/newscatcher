@@ -1,13 +1,13 @@
 {
-  "name": "NewsCatcher MAS-527",
-  "description": "MIP-003 news research agent (NewsCatcher API). Local dev on localhost:3040.",
+  "name": "News Catcher",
+  "description": "MIP-003 news research agent (NewsCatcher API). Fixed 3 ADA per job on Preprod.",
   "apiBaseUrl": "http://localhost:3040",
   "Tags": ["news", "research", "newscatcher"],
   "Capability": { "name": "newscatcher", "version": "1" },
   "Author": {
-    "name": "Masumi Dev",
-    "contactEmail": "dev@masumi.local",
-    "organization": "Masumi"
+    "name": "Bytegen Labs",
+    "contactEmail": "bytegenlabs@gmail.com",
+    "organization": "Bytegen"
   },
   "ExampleOutputs": [
     {
@@ -27,7 +27,10 @@
       "network": "Preprod",
       "paymentSourceType": "Web3CardanoV2",
       "address": "addr_test1wzs4e6wc95hkwezlccjw9mdvq0r0rsgx6zk34avptga3ftgn37w4g",
-      "pricing": { "pricingType": "Free" }
+      "pricing": {
+        "pricingType": "Fixed",
+        "fixed": [{ "asset": "", "amount": "3000000" }]
+      }
     }
   ]
 }

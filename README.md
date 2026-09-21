@@ -8,7 +8,7 @@ MIP-003 HTTP agent that searches news via the [NewsCatcher News API](https://www
 - pnpm
 - NewsCatcher API key
 
-Masumi Payment Service is only required for paid `start_job` (escrow), not for local development.
+Masumi Payment Service is required for paid `start_job` (escrow). Free local smoke tests still work with `anonymous` and payment env unset.
 
 ## Setup
 
@@ -71,9 +71,20 @@ Paid jobs stay in `awaiting_payment` until the payment node reports `FundsLocked
 2. This agent: `pnpm dev` → `http://localhost:3040`
 3. `masumi-cli doctor --json` (profile should point at `:3005`)
 4. `./scripts/smoke-test.sh` (free mode)
-5. Register on the local node with `apiBaseUrl` = `http://localhost:3040` (`masumi-cli sell agent register`, manifest in `scripts/register-local-manifest.json`; overview in `scripts/run-local.sh`)
+5. Register on the local node (`masumi-cli sell agent register`, manifest in `scripts/register-local-manifest.json`; overview in `scripts/run-local.sh`)
 
-There is no Sokosumi app in this monorepo. Local Masumi E2E is payment node + MIP-003 + `masumi-cli`. Hosted marketplace listing is a separate step.
+### Paid registration (Preprod, 3 ADA)
+
+This branch registers **Fixed 3 ADA** per job (`3000000` lovelace). See `scripts/preprod-assets.json`.
+
+1. Set `apiBaseUrl` in the manifest to your public agent URL (ngrok or production), not `localhost`, if the registry should mark the agent **Online**.
+2. Set `supportedPaymentSources[].address` to your node’s **Web3CardanoV2** smart contract address (`GET /api/v1/payment-source` on the payment node).
+3. **Update** an existing V2 registration (`POST /api/v1/registry/update` or payment admin) or register fresh, then copy the current **`agentIdentifier`** into `.env` as `AGENT_IDENTIFIER` and set `PAYMENT_*` vars. Restart the agent (`capabilities.masumi_payments` must be true).
+4. Re-sync Sokosumi agents; ensure a **CreditCost** row exists for **lovelace** (`unit` `""` or `lovelace`) so hires debit credits correctly.
+
+Paid hires from Sokosumi use the platform purchasing wallet on your payment node; fund it with enough **ADA** for the job price plus transaction fees.
+
+There is no Sokosumi app in this repo. Local Masumi E2E is payment node + MIP-003 + `masumi-cli`. Hosted marketplace listing is a separate step.
 
 ## Sokosumi (hosted)
 
