@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id                   String    @id @default(cuid())
+  status               String
+  buyerId              String
+  inputData            Json
+  inputHash            String?
+  outputData           Json?
+  outputHash           String?
+  errorMessage         String?
+  blockchainIdentifier String?
+  paymentAddress       String?
+  amountLovelace       String?
+  createdAt            DateTime  @default(now())
+  completedAt          DateTime?
+}

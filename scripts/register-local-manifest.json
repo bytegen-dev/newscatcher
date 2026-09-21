@@ -1,0 +1,33 @@
+{
+  "name": "NewsCatcher MAS-527",
+  "description": "MIP-003 news research agent (NewsCatcher API). Local dev on localhost:3040.",
+  "apiBaseUrl": "http://localhost:3040",
+  "Tags": ["news", "research", "newscatcher"],
+  "Capability": { "name": "newscatcher", "version": "1" },
+  "Author": {
+    "name": "Masumi Dev",
+    "contactEmail": "dev@masumi.local",
+    "organization": "Masumi"
+  },
+  "ExampleOutputs": [
+    {
+      "name": "availability",
+      "url": "http://localhost:3040/availability",
+      "mimeType": "application/json"
+    }
+  ],
+  "Legal": {
+    "privacyPolicy": "https://www.masumi.network/privacy",
+    "terms": "https://www.masumi.network/terms"
+  },
+  "sendFundingLovelace": "10000000",
+  "supportedPaymentSources": [
+    {
+      "chain": "Cardano",
+      "network": "Preprod",
+      "paymentSourceType": "Web3CardanoV2",
+      "address": "addr_test1wzs4e6wc95hkwezlccjw9mdvq0r0rsgx6zk34avptga3ftgn37w4g",
+      "pricing": { "pricingType": "Free" }
+    }
+  ]
+}
