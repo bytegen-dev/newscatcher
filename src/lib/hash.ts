@@ -13,11 +13,12 @@ export function mipHashInputHex(buyerId: string, inputData: unknown): string {
   return createHash('sha256').update(pre, 'utf8').digest('hex').toLowerCase();
 }
 
-export function mipHashOutputHex(buyerId: string, output: unknown): string {
-  const json = canonicalize(output);
-  if (json === undefined) {
-    throw new Error('canonicalize failed for output hash');
-  }
-  const pre = `${buyerId};${json}`;
-  return createHash('sha256').update(pre, 'utf8').digest('hex').toLowerCase();
+/**
+ * Result hash for escrow / Sokosumi verification (Masumi `hashResult`).
+ * Hashes the job result string the buyer sees (markdown), not the full output JSON.
+ */
+export function mipHashResultHex(buyerId: string, result: string): string {
+  const escaped = JSON.stringify(result).slice(1, -1);
+  const pre = `${buyerId};${escaped}`;
+  return createHash('sha256').update(pre, 'utf8').digest('hex');
 }
