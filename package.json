@@ -9,7 +9,10 @@
     "build": "prisma generate && tsc",
     "start": "node dist/index.js",
     "db:push": "prisma db push",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "coworker:dev": "tsx watch src/coworker-worker/index.ts",
+    "coworker:start": "node dist/coworker-worker/index.js",
+    "test": "node --import tsx --test src/coworker-worker/parse-brief.test.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",
