@@ -4,3 +4,4 @@ dist/
 *.db
 *.db-journal
 .DS_Store
+.coworker-worker-state.json

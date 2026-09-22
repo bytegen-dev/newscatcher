@@ -65,27 +65,35 @@ Optional `input_data` fields: `countries`, `from_date` (see `/input_schema`).
 
 Paid jobs stay in `awaiting_payment` until the payment node reports `FundsLocked`, then the news search runs.
 
+**Job price is not configured in this repo.** Fixed pricing (token and amount) is set when you register the agent on a Masumi payment node (admin UI or CLI manifest). The agent calls `POST /payment` and uses whatever `RequestedFunds` the node returns for your `AGENT_IDENTIFIER`.
+
 ## Local stack (no ngrok)
 
-1. `masumi-payment-service`: `pnpm dev` → `http://localhost:3005`
+1. `masumi-payment-service`: `pnpm dev` (see that repo for the API port, often `http://localhost:3001/api/v1`)
 2. This agent: `pnpm dev` → `http://localhost:3040`
-3. `masumi-cli doctor --json` (profile should point at `:3005`)
+3. `masumi-cli doctor --json` (profile should point at your local payment API)
 4. `./scripts/smoke-test.sh` (free mode)
-5. Register on the local node (`masumi-cli sell agent register`, manifest in `scripts/register-local-manifest.json`; overview in `scripts/run-local.sh`)
+5. Optional paid path: register on the local node (`masumi-cli sell agent register`, manifest in `scripts/register-local-manifest.json`; overview in `scripts/run-local.sh`). Edit pricing there or in payment admin, not in agent source.
 
-### Paid registration (Preprod, 3 ADA)
+### After registration (local or hosted)
 
-This registers **Fixed 3 ADA** per job (`3000000` lovelace). See `scripts/preprod-assets.json`.
+1. Set **`apiBaseUrl`** to a URL the registry can reach (tunnel or production HTTPS for hosted; `localhost:3040` is fine for local-only).
+2. Copy **`agentIdentifier`** into `.env` as **`AGENT_IDENTIFIER`**, plus **`PAYMENT_SERVICE_URL`**, **`PAYMENT_API_KEY`**, **`NETWORK`**. Restart the agent (`/availability` → `masumi_payments: true`).
+3. For Sokosumi catalog visibility, sync and publish are handled on the Sokosumi side (see hosted section below).
 
-1. Set `apiBaseUrl` in the manifest to your public agent URL (ngrok or production), not `localhost`, if the registry should mark the agent **Online**.
-2. Set `supportedPaymentSources[].address` to your node’s **Web3CardanoV2** smart contract address (`GET /api/v1/payment-source` on the payment node).
-3. **Update** an existing V2 registration (`POST /api/v1/registry/update` or payment admin) or register fresh, then copy the current **`agentIdentifier`** into `.env` as `AGENT_IDENTIFIER` and set `PAYMENT_*` vars. Restart the agent (`capabilities.masumi_payments` must be true).
-4. Re-sync Sokosumi agents; ensure a **CreditCost** row exists for **lovelace** (`unit` `""` or `lovelace`) so hires debit credits correctly.
-
-Paid hires from Sokosumi use the platform purchasing wallet on your payment node; fund it with enough **ADA** on Preprod for the job price plus transaction fees.
-
-There is no Sokosumi app in this repo. Local Masumi E2E is payment node + MIP-003 + `masumi-cli`. Hosted marketplace listing is a separate step.
+There is no Sokosumi app in this repo. Local Masumi E2E is payment node + MIP-003 + optional `masumi-cli`. Hosted marketplace listing is a separate step.
 
 ## Sokosumi (hosted)
 
 After local validation, list on the marketplace: [list-agent on Sokosumi](https://www.masumi.network/dev/masumi/documentation/how-to-guides/list-agent-on-sokosumi).
+
+## Sokosumi coworker (tasks only)
+
+Register a **coworker** in Core (admin) with `capabilities: ["tasks"]`, then run the worker that hires this agent on assigned tasks. No chat engine required.
+
+See [docs/COWORKER.md](./docs/COWORKER.md). Quick start:
+
+```bash
+# .env: SOKOSUMI_COWORKER_TOKEN, SOKOSUMI_NEWS_AGENT_ID
+pnpm coworker:dev
+```
